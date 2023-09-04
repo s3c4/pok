@@ -1,0 +1,21 @@
+.hand-cards {
+    .hand-player {
+        display: inline-block;
+        &:first-child {
+            margin-right: 100px;
+        }
+        img {
+            display: inline-block;
+            margin-right: 10px;
+        }
+        .winner {
+            color: blue;
+        }
+        .loser {
+            color: red;
+        }
+        .draw {
+            color: yellow;
+        }
+    }
+}
