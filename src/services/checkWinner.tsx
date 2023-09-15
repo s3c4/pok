@@ -56,128 +56,76 @@ const potentialResults: PotentialResult[] = [
 
 const CheckWinner = {
     preparePlayer: async (player: string[]): Promise<CardAnalyse> => {
-        // cards of players: keept in order of card value, keep the noOfCards of that value, keep the suits of that value card
+        // cards of players: keept in order of card value, keep the noOfCards of that value
         let cards: Card[] = [
             {
                 cardPower: 2,
                 cardValue: '2',
-                noOfCards: 0,
-                S: false,
-                D: false,
-                H: false,
-                C: false
+                noOfCards: 0
             },
             {
                 cardPower: 3,
                 cardValue: '3',
-                noOfCards: 0,
-                S: false,
-                D: false,
-                H: false,
-                C: false
+                noOfCards: 0
             },
             {
                 cardPower: 4,
                 cardValue: '4',
-                noOfCards: 0,
-                S: false,
-                D: false,
-                H: false,
-                C: false
+                noOfCards: 0
             },
             {
                 cardPower: 5,
                 cardValue: '5',
-                noOfCards: 0,
-                S: false,
-                D: false,
-                H: false,
-                C: false
+                noOfCards: 0
             },
             {
                 cardPower: 6,
                 cardValue: '6',
-                noOfCards: 0,
-                S: false,
-                D: false,
-                H: false,
-                C: false
+                noOfCards: 0
             },
             {
                 cardPower: 7,
                 cardValue: '7',
-                noOfCards: 0,
-                S: false,
-                D: false,
-                H: false,
-                C: false
+                noOfCards: 0
             },
             {
                 cardPower: 8,
                 cardValue: '8',
-                noOfCards: 0,
-                S: false,
-                D: false,
-                H: false,
-                C: false
+                noOfCards: 0
             },
             {
                 cardPower: 9,
                 cardValue: '9',
-                noOfCards: 0,
-                S: false,
-                D: false,
-                H: false,
-                C: false
+                noOfCards: 0
             },
             {
                 cardPower: 10,
                 cardValue: 'T',
-                noOfCards: 0,
-                S: false,
-                D: false,
-                H: false,
-                C: false
+                noOfCards: 0
             },
             {
                 cardPower: 11,
                 cardValue: 'J',
-                noOfCards: 0,
-                S: false,
-                D: false,
-                H: false,
-                C: false
+                noOfCards: 0
             },
             {
                 cardPower: 12,
                 cardValue: 'Q',
-                noOfCards: 0,
-                S: false,
-                D: false,
-                H: false,
-                C: false
+                noOfCards: 0
             },
             {
                 cardPower: 13,
                 cardValue: 'K',
-                noOfCards: 0,
-                S: false,
-                D: false,
-                H: false,
-                C: false
+                noOfCards: 0
             },
             {
                 cardPower: 14,
                 cardValue: 'A',
-                noOfCards: 0,
-                S: false,
-                D: false,
-                H: false,
-                C: false
+                noOfCards: 0
             },
         ];
 
-        // keep what are the maximum of a specific card repeted (it can be 1, 2, 3 of 4 of a kind)
+        // keep the maximum of a specific card repeted (it can be 1, 2, 3 or 4 of a kind)
         let maxNoOfCards = 0;
 
         // check if suit - keep the no of each suit
@@ -190,7 +138,7 @@ const CheckWinner = {
 
         player.map((plainCard: string): void => {
             const plainCardValue = plainCard[0];
-            const plainCardSuit: string = plainCard[1];
+            const plainCardSuit = plainCard[1];
             cards
                 .filter((card: Card) => card.cardValue === plainCardValue)
                 .map((card: Card) => {
@@ -201,11 +149,9 @@ const CheckWinner = {
                     }
                     // -->Set: suit of card
                     // neet to transform to any to access with a dynamic key the object
-                    (card as any)[plainCardSuit] = true;
                     (suit as any)[plainCardSuit]++;
                 });     
         });
-
         return {
             cards,
             maxNoOfCards,
@@ -218,7 +164,7 @@ const CheckWinner = {
             return potentialResults[7];
         }
 
-        // 3 of a kind, or flush
+        // 3 of a kind, or full house
         if(maxNoOfCards === 3) {
             // check a pair in cards for a full house
             if(cards.filter((card) => card.noOfCards === 2).length > 0) {
@@ -241,14 +187,13 @@ const CheckWinner = {
         // flush & straight, flush, straight
         if(maxNoOfCards === 1) {
             // check suit
-            const isSuit = (suit.C === 5 || suit.D === 5 || suit.H === 5 || suit.S === 5);
+            const isFlush = (suit.C === 5 || suit.D === 5 || suit.H === 5 || suit.S === 5);
             // check straight
             let isStraight = false;
             for (var i = 0; i < cards.length; i++) {
                 // get the first card
                 if(cards[i].noOfCards === 1) {
                     isStraight = (
-                        cards[i].noOfCards === 1 &&
                         cards[i + 1].noOfCards === 1 &&
                         cards[i + 2].noOfCards === 1 &&
                         cards[i + 3].noOfCards === 1 &&
@@ -258,11 +203,11 @@ const CheckWinner = {
                 }
             }
             // straight flush 
-            if(isSuit && isStraight) {
+            if(isFlush && isStraight) {
                 return potentialResults[8]; 
             }
             // flush only
-            if(isSuit) {
+            if(isFlush) {
                 return potentialResults[5]; 
             }
             // straight only
